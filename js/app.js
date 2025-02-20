@@ -3,8 +3,8 @@ let count = 1
 class Animal{
 
     constructor(animalName, species, diet, habitat){
-        this.animal = {
-            id: `${species}${count}`,
+        this.info = {
+            id: count,
             animalName,
             species,
             diet,
@@ -12,8 +12,8 @@ class Animal{
         }
     }
 
-    getDescription(){
-        return`The ${this.animal.animalName} is a type of ${this.animal.species}. It has a ${this.animal.diet} diet and lives in a ${this.animal.habitat} habitat.`
+    getDescription(animalName, species, diet, habitat){
+        return`The ${animalName} is a type of ${species}. It has a ${diet} diet and lives in a ${habitat} habitat.`
     }
 }
 
@@ -24,10 +24,9 @@ submitBtn.addEventListener('click', (e)=>{
     // console.log('clicked')
     let obj = {}
     obj= {...getInfo()}
-    
     const animal = new Animal(obj.animalName, obj.species, obj.diet, obj.habitats)
-
-    console.log(animal)
+    buildCard(animal.info, animal.getDescription)
+    count++
 })
 
 const getInfo =()=>{
@@ -44,4 +43,43 @@ const getInfo =()=>{
 
 
     return{animalName, species, diet, habitats}
+}
+
+const buildCard=(obj, func)=>{
+    const row = document.getElementById('cardRow')
+
+    const column = document.createElement('div')
+    column.classList.add('col')
+
+    const card = document.createElement('div')
+    card.classList.add('card', 'h-100')
+
+    const cardBody = document.createElement('section')
+    cardBody.classList.add('card-body')
+
+    const animalName = document.createElement('h2')
+    animalName.classList.add('card-title', 'text-capitalize')
+    animalName.innerText = obj.animalName
+
+    const species = document.createElement('p')
+    species.classList.add('card-text', 'text-capitalize')
+    species.innerText = `Species: ${obj.species}`
+
+    const diet = document.createElement('p')
+    diet.classList.add('card-text')
+    diet.innerText = `Diet: ${obj.diet}`
+
+    const description = document.createElement('p')
+    description.classList.add('card-text', 'fst-italic')
+    description.innerText = func(obj.animalName, obj.species, obj.diet, obj.habitat)
+    // description.innerHTML = `<span>${func(obj.animalName, obj.species, obj.diet, obj.habitat)}`
+
+    cardBody.appendChild(animalName)
+    cardBody.appendChild(species)
+    cardBody.appendChild(diet)
+    cardBody.appendChild(description)
+
+    card.appendChild(cardBody)
+    column.appendChild(card)
+    row.appendChild(column)
 }
